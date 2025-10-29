@@ -1,0 +1,7 @@
+[data-component-part="step-number"] > div {
+    background-color: white;
+  }
+
+  :not(.dark) code {
+    background-color: white;
+}

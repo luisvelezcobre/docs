@@ -1,0 +1,116 @@
+---
+title: "Approval Process (Maker-Checker)"
+---
+
+## Overview
+
+The Maker-Checker process ensures secure and controlled workflows for money movements by requiring approvals for specific actions. This robust process supports both individual and batch-level approvals, enabling flexible transaction management while maintaining high security standards.
+
+## Approval Section
+
+The Approval Section is a dedicated area for managing payment approvals, allowing users to take actions individually or in bulk.
+
+**Features:**
+
+- **View Approvals:** Review payments requiring action.
+- **Approve/Decline Payments:** Take action on payments individually or select up to 50 payments for bulk decisions using the checkbox.
+- **MFA (Multi-Factor Authentication):** Required for all approval actions.
+- **Batch-Level Approvals:** Use the Batches View to manage approvals for bulk payments.
+
+## How Approvals Work
+
+### For Individual Payments
+
+Each payment has an indicator that determines whether approval is required:
+
+- **Creator Roles:** Approval is always required.
+- **Admin Users:** Can choose whether a payment requires approval or bypasses it.
+- **Payments Needing Approval:** These must be approved or declined by users with the appropriate permissions in the Approval Section.
+
+### For Bulk Money Movements
+
+Approvals for bulk payments are managed at the batch level:
+
+- **Pending Approval Status:** When a bulk payment file is uploaded, the batch and all its associated payments are flagged as Pending Approval unless individual decisions have already been made.
+- **Bulk Decisions:** Approving or declining at the batch level affects only payments without prior decisions.
+
+**Steps to Manage Batch Approvals:**
+
+<Steps>
+  <Step>
+    Navigate to **Home** → **Money Movements** → **Batches**.
+  </Step>
+  <Step>
+    Select the desired batch by clicking its name.
+  </Step>
+  <Step>
+    Use the **Approve** or **Decline** buttons in the batch detail view to take action.
+  </Step>
+</Steps>
+
+<Info>
+  **Note**: Pre-approved or declined payments are not affected by batch-level decisions.
+</Info>
+
+## Approval States
+
+| State | Description |
+| :--- | :--- |
+| Need Approval | Payments awaiting a decision |
+| Approved & Processing | Payments approved and moved into the processing stage. |
+| Cancelled | Payments declined and were marked as cancelled. |
+
+## Considerations
+
+**Dual Control Rules:** The Maker-Checker process integrates with **Dual Control Rules** to further tailor approval workflows.
+
+- Dual Control Rules can be configured in the **Security** section to enforce specific requirements (e.g., multiple approvers).
+
+**Permissions and Roles**:
+
+- Ensure users have the appropriate permissions for approvals.
+- **Creators:** Restricted to initiating payments only.
+- **Approvers/Admins:** Can approve or decline payments.Approval\*\*. Pre-approved or declined payments are excluded.
+
+**Batch-Level Approvals:**
+
+- Only payments marked as **Need Approval** are affected by batch decisions.
+- Pre-approved or declined payments are excluded.
+
+## Examples
+
+
+**Scenario 1: Approving Payments Individually**
+
+1. Navigate to **Home > Money Movements > Approval Section**.
+2. Select payments marked as **"Need Approval"**.
+3. Click **Approve** or **Decline** for each payment.
+
+**Scenario 2: Batch-Level Decision**
+
+1. Upload a bulk payment file.
+2. Navigate to **Home > Money Movements > Batches**.
+3. Select a batch marked as **Pending Approval**.
+4. Click **Approve Batch** or **Decline Batch**.
+- Payments without prior decisions will be updated.
+
+
+## FAQs
+
+<AccordionGroup>
+<Accordion title="Can I approve multiple payments at once?">
+A: Yes, in the **Approval Section**, you can select up to 50 payments and approve or decline them simultaneously using the checkbox.
+</Accordion>
+<Accordion title="What happens if a payment in a batch is already approved?">
+A: Batch-level decisions only apply to payments without prior decisions. Approved or declined payments remain unaffected.
+</Accordion>
+<Accordion title="Do I need special permissions for batch-level decisions?">
+A: Yes, only users with the appropriate roles (e.g., Admin) can make batch-level decisions.
+</Accordion>
+<Accordion title="How do I enable or configure Dual Control Rules?">
+A: Go to the **Security** section in the portal and enable **Dual Control Rules**. Configure specific requirements for approvals, such as requiring multiple approvers.
+</Accordion>
+<Accordion title="Is MFA required for batch-level approvals?">
+A: Yes, MFA is mandatory for all approval actions.
+</Accordion>
+</AccordionGroup>

@@ -1,0 +1,48 @@
+---
+title: Main Concepts
+description: A glossary of important terms and concepts for using the Cobre platform
+---
+
+## Cobre Balance
+<Info>
+**Countries Available:** Colombia and México
+</Info>
+The platform enables the creation of "Cobre Balances" across its operational regions. These accounts are fundamental for accessing a range of platform services, depending on the geography. Cobre Balances serve as a versatile asset within the Cobre environment, enhancing financial flexibility.
+<Accordion title="Types" defaultOpen>
+**Colombia**
+<ul>
+<li>Fast Pay</li>
+<li>ACH</li>
+<li>BreB: `pr_col_cobre`</li>
+</ul>
+**México**
+<ul>
+<li>STP: `pr_mex_cobre`</li>
+<li>Tesored: `pr_mex_cobre3`</li>
+</ul>
+**CBP**
+- By Currency: `pr_global_cobre` (USD / PEN / CLP)
+</Accordion>
+
+## Counterparty
+A counterparty is an entity, either an individual or a company, involved in a money movement. This entity is critical in determining the direction of the funds in the transaction: 
+- When Cobre is sending funds: The counterparty is the beneficiary, or the entity receiving the funds. 
+- When Cobre is requesting or collecting funds: The counterparty is the source, or the entity providing the funds. The counterparty must have all necessary information specific to the type of money movement and its geographical context. This ensures the proper execution of the transaction, whether the counterparty is acting as the sender or the recipient of the funds.
+<Info>
+**Countries Available:** Colombia and México
+</Info>
+<Accordion title="Types" defaultOpen>
+<ul>
+- **Colombia**
+<li>Checking Account `(cc)`</li>
+<li>Savings Account `(ch)`</li>
+<li>Electronic deposit `(dp)`</li>
+<li>Request to Pay `(r2p)`</li>
+<li>Cobre Balance `(cobre_balance)`</li>
+<li>BreB `(breb_key)`</li>
+</ul>
+- **México**
+    - Clabe Account `(clabe)`
+    - Spei Card number `(spei_card)`
+    - Return Money Movement `(mm_return)`
+</Accordion>

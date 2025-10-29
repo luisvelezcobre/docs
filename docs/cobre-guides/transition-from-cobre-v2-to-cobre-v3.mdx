@@ -1,0 +1,139 @@
+---
+title: "Transition from Cobre v2 to Cobre v3"
+description: "This article will help to understand how migrate to Cobre v3 understanding how API v2 are being homologated in API v3 versión."
+sidebarTitle: "Migration Guide API"
+---
+
+## Introduction
+
+Cobre v3 is a new API setup that redefines how services are delivered to our clients. We now have enhanced API segmentation, providing customers with greater control over the money movement cycle. Let's review the changes from API setup v2 to API setup v3:
+
+| API v2 setup | Description | \# API's |
+| :--- | :--- | :--- |
+| Auth | API that enables authentication and authorization for the Cobre platform. | 1 |
+| PayOut | API that allows to the customer to transfer money from an origin account to a destinatary account. | 3 |
+| PayIn | API that enables customers to generate a payment link, offering various payment methods such as PSE, Bancolombia, and Nequi, allowing payers to complete transactions seamlessly. | 3 |
+| Reports | An API that allows customers to download specific reports generated on a daily basis. | 3 |
+| Movements | API that enables querying of various debit and credit transactions for the reconciliation process. | 1 |
+| Balance | API that enables real-time querying of the Cobre account balance ONLY. | 1 |
+| Webhook | Callback implementation that allows the user to receive notifications based on the previously registered PayOut status. | 1 |
+
+| API v3 setup | Description | \# API's |
+| :--- | :--- | :--- |
+| Auth | API that enables authentication and authorization for the Cobre platform. | 1 |
+| Accounts | API that enables to manage accounts, creation, link and management.\* | 5 |
+| Counterparties | API that enables to manage counterparties, creation, querying and delete. | 3 |
+| Money Movements | API that enables to do manage a money movement, create, querying, scheduler for both payments and request to pay. | 8 |
+| Bulk Money movements | API that enables to create and querying a bulk money movement. | 2 |
+| Cross border | API that enables to initiate a cross border money movement, request a quote, querying requested quotes. | 3 |
+| Notifications & Subscriptions | API that enables to subscribe different events to be notified, querying and delete events. | 4 |
+| Reports | . | 3 |
+
+
+## How the authentication will be in Cobre v3, and What's New Compared to Cobre v2?
+
+The Cobre v3 platform is an entirely new integration, meaning the integration must be done from scratch, and nothing from the Cobre v2 platform can be reused. Now lets see what had change from Cobre v2 to Cobre v3:
+
+<CodeGroup>
+```bash v2 icon="code"
+--header 'Authorization'
+--header 'X-API-KEY'
+```
+```bash v3 icon="code"
+{
+  "secret": "incredibly_secure_secret_for_cobre!",
+  "user_id": "cli_pxt0001"
+}
+```
+</CodeGroup>
+
+### What's changed?
+
+You will no longer need an API key and two encoded secrets. As a Cobre customer, you will now use a user ID and a secret (similar to a password) to connect to our platform. In this first version, credentials will be sent via email, but in future releases, they will be available through the Cobre Portal v3 in the developer module.
+
+The response will be in both cases a access\_token.
+
+## How to Make a Money Transfer in Cobre v3, and What's New Compared to Cobre v2?
+
+Now, let's understand what has changed in v3 when making a money transfer. Previously, we used the Cobre v2 platform, where the following APIs were required to process a PayOut:
+
+- Create payment instruction (bulk or unit)
+
+<CodeGroup>
+```bash v2 icon="code" expandable
+{
+  "controlRecord": 0,
+  "workplaceBankReference": "string",
+  "noveltyDetails": [
+    {
+      "type": "string",
+      "totalAmount": 0,
+      "description": "string",
+      "descriptionExtra1": "string",
+      "descriptionExtra2": "string",
+      "descriptionExtra3": "string",
+      "walletCode": "string",
+      "reference": "string",
+      "dueDate": "string",
+      "beneficiary": {
+        "documentType": "string",
+        "documentNumber": "string",
+        "name": "string",
+        "lastName": "string",
+        "email": "string",
+        "phone": "string",
+        "bankInfo": {
+          "bankCode": "string",
+          "accountType": "string",
+          "accountNumber": "string"
+        }
+      }
+    }
+  ],
+  "originAccount": {
+    "bankCode": "string",
+    "typeCode": "string",
+    "number": "string",
+    "cobreAccountUUID": "string"
+  }
+}
+```
+```bash v3 icon="code"
+{
+  "amount": 1000,
+  "metadata": {
+    "reference": "1234567",
+    "description": "my very first SPEI payment!"
+  },
+  "source_id": "acc_1232145215",
+  "external_id": "ext_id_to_trck_payment",
+  "destination_id": "cp_5YFeIDhNkz",
+  "checker_approval": false
+}
+```
+</CodeGroup>
+### What has changed?
+
+With the new Money Movement API, you now have an easier and more streamlined way to handle transfers and requests to pay. Both actions are managed through the same API, with the metadata determining the type of money movement. Additionally, beneficiary and account details are now simplified, requiring only the destination\_id and source\_id.
+
+Cobre v2 initially only allowed users to make fast payments using a default Cobre balance account. Now, you can select the account simply by using the source\_id.
+
+For more information on how source\_id and destination\_id are being generated, please visit the [Account](https://developers.cobre.co/docs/Platformv3/2sp3194o5f34j-accounts-api) and [Counterparties](https://developers.cobre.co/docs/Platformv3/j25nkluedopeb-counterparties-api) API's sections.
+
+## How to Make a Movements query in C, and What's New Compared to Cobre v2?
+
+We now have an API in Accounts v3 that allows querying either all transactions or individual transactions per account. Previously, with the Movements API v2, querying was limited and lacked account segmentation. Additionally, the layout now provides more information than ever before.
+
+For more details, please visit the [Obtain Accounts Transactions](https://developers.cobre.co/docs/Platformv3/feybjjnkwaerg-obtain-account-transactions) or [Obtain One Transaction](https://developers.cobre.co/docs/Platformv3/zwh9ch6q885zu-obtain-one-transaction) APIs.
+
+## How to Query a Account Balance in v3, and What's New Compared to Cobre v2?
+
+We now have a new Accounts API that enables you to create or link both Cobre Balance and CONNECT accounts. This API allows you to query comprehensive information related to these accounts, including balances, significantly enhancing account details. Previously, the "Obtain Account Balance API v2" only allowed querying a single Cobre Balance.
+
+For more details, please visit the [Obtain All Accounts](https://developers.cobre.co/docs/Platformv3/hcj22xm66kwrk-obtain-all-accounts) or [Obtain One Account](https://developers.cobre.co/docs/Platformv3/nx75a3lg1876h-obtain-one-account) APIs.
+
+## How API Reports works in v3, and What's New Compared to Cobre v2?
+
+Our Reports API in v3 now includes functionality that meets our clients' needs, with no limits on generating reports for specific periods, allowing for on-demand reports on any desired dates.
+
+For more details, please visit the [API Reports section](https://developers.cobre.co/docs/Platformv3/toppi1o94w390-reports-api).

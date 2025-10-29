@@ -1,0 +1,1346 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 2sp3194o5f34j
+info:
+  title: Accounts API
+  version: '1.0'
+  description: |+
+    This API provides services to set up, maintain, and manage connected accounts. For this purpose a set of different APIs and endpoints will be exposed so that by using the provided services clients can register accounts and obtain all the previously registered accounts and their corresponding information.
+
+    Please note the list of banks available for this solution in the [Providers](../docs/providers-catalog.md) documentation.
+
+    A `delete` endpoint will be facilitated so that accounts can be unlinked from Cobre’s platform. ( 🚧 Coming soon)
+
+    <!--### Connect Accounts Statuses
+    ![Connect Accounts Statuses](../assets/images/connect_accounts_statuses.jpg)
+
+    - **Connecting:** Initial status of a connect account. Reflects an account that is in the process of being connected.
+    - **Connected:** Status that indicates that an account has been successfully connected to Cobre.
+    - **Disconnected:** Status that indicates that an account has been disconnected either by the provider or the client.
+    - **Failed:** Status indicating that it was not possible to connect the account.]]
+
+
+servers:
+  - url: https://api.cobre.co/v1/
+    description: Production
+paths:
+  /accounts:
+    post:
+      summary: Connect an Account
+      tags: []
+      responses:
+        '201':
+          $ref: '#/components/responses/AccountCreated'
+        '409':
+          $ref: '#/components/responses/409-Error'
+      operationId: post-accounts
+      x-stoplight:
+        id: ahi1qz17m06c0
+      x-internal: false
+      security:
+        - Authorization: []
+      requestBody:
+        $ref: '#/components/requestBodies/Account-Creation-Request'
+      description: |-
+        ## Managing Financial Institutions and Saldo Cobre Accounts on the Cobre Platform
+
+        This endpoint serves as a cornerstone for Cobre Platform users, offering the ability to manage financial institution accounts with ease. It facilitates the processes of connecting to existing ones within our ecosystem.
+
+
+        ## Connecting to Financial Institution Accounts
+
+        With Cobre, you can seamlessly integrate your existing accounts at designated financial institutions. Cobre manages direct connections to the bank, efficiently handling intra-day balance inquiries and transaction management. Additionally, Cobre provides the capability to initiate money movements using any connected account.
+
+        ### Financial Institutions Providers Catalog
+
+        For effective use of this API, a provider ID is required along with the specification of an action. This ensures the API can accurately process your request.
+
+        ### Mexico
+        List of all the financial institutions providers available in Mexico along with the available services.
+
+        | Code  | Supplier | Connect | Balances | Transactions | Payments |
+        |-|-|-|-|-|-|
+        | pr_mex_072 | Banorte | <div align="center">Yes</div>  | <div align="center">Yes</div> | <div align="center">Yes</div> | <div align="center">Yes</div> |
+        | pr_mex_014 | Santander  | <div align="center">Yes</div>  | <div align="center">Yes</div> | <div align="center">Yes</div>| <div align="center">Yes</div>
+        | pr_mex_012 | BBVA Mex  | <div align="center">Yes</div>  | <div align="center">Yes</div> | <div align="center">Yes</div>| <div align="center">Yes</div>
+
+
+
+        ### Colombia
+        List of all the financial institutions providers available in Colombia along with the available services.
+
+        | Code  | Supplier | Connect | Balances | Transactions | Payments |
+        |-|-|-|-|-|-|
+        | pr_col_1007 | Bancolombia | <div align="center">Yes</div> | <div align="center">Yes</div>  | <div align="center">Yes</div> | <div align="center">Yes</div>|
+        | pr_col_1013 | BBVA Colombia | <div align="center">Yes</div> | <div align="center">Yes</div>  | <div align="center">Yes</div> | <div align="center">Yes</div>|
+        | pr_col_1023 | Banco de Occidente | <div align="center">Yes</div> | <div align="center">Yes</div>  | <div align="center">Yes</div> | <div align="center">Yes</div>|
+        | pr_col_1001 | Banco de Bogotá | <div align="center">Yes</div>| <div align="center">Yes</div> | <div align="center">Yes</div>  | <div align="center">Yes</div> | <div align="center">Yes</div>|
+
+
+
+        > Only the action `connect` within the accounts API is available for Financial Institution providers.
+
+        For more information about all the available providers in Platform V3, please refer to the [Providers](../docs/providers-catalog.md) documentation.
+    get:
+      summary: Obtain all connected accounts
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/List_Accounts'
+      operationId: get-accounts
+      x-stoplight:
+        id: hcj22xm66kwrk
+      x-internal: false
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: page_number
+          description: Number of the page to be included in the response. By default 0 (first page).
+        - schema:
+            type: boolean
+            default: false
+          in: query
+          name: balance
+          description: Parameter to define if the balance of the accounts should be included. By default, false.
+        - schema:
+            type: boolean
+            default: false
+          in: query
+          name: sensitive_data
+          description: Parameter to define if the sensitive data (including the balance) should be included in the API response. By default, false.
+        - schema:
+            type: string
+          in: query
+          name: alias
+          description: Filter to search for account aliases using a 'contains' search.
+        - schema:
+            type: string
+            example: connected
+          in: query
+          name: status
+          description: Filter by account status.
+        - schema:
+            type: string
+            example: pr_mex_cobre
+          in: query
+          name: provider_id
+          description: Filter by account provider ID.
+        - schema:
+            type: string
+            example: clabe
+          in: query
+          name: account_type
+          description: Filter by account type using an 'equals' search (case-insensitive, accepts uppercase).
+          example: clabe
+        - schema:
+            type: string
+          in: query
+          name: account_number
+          description: Filter by account number using a 'contains' search.
+          example: '1234'
+        - schema:
+            type: number
+          in: query
+          name: balance_gte
+          description: Filter by account balance using a 'greater than or equal to' search.
+          example: 500
+        - schema:
+            type: number
+          in: query
+          name: balance_lte
+          description: Filter by account balance using a 'less than or equal to' search.
+          example: 2000
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: updated_at
+          description: 'Filter by account''s last updated date and time using an ''equals'' search (formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).'
+          example: '2023-10-25T14:30:00Z'
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: updated_gte
+          description: 'Filter by account''s last updated date and time using a ''greater than or equal to'' search (formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).'
+          example: '2023-10-01T00:00:00Z'
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: updated_lte
+          description: 'Filter by account''s last updated date and time using a ''less than or equal to'' search (formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).'
+          example: '2023-10-31T23:59:59Z'
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: obtained_balance_at
+          description: 'Filter by the date and time the balance was obtained using an ''equals'' search (formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).'
+          example: '2023-10-25T14:30:00Z'
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: obtained_balance_at_gte
+          description: 'Filter by the date and time the balance was obtained using a ''greater than or equal to'' search (formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).'
+          example: '2023-10-01T00:00:00Z'
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: obtained_balance_at_lte
+          description: 'Filter by the date and time the balance was obtained using a ''less than or equal to'' search (formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ).'
+          example: '2023-10-31T23:59:59Z'
+        - schema:
+            type: string
+          in: query
+          name: geo
+          description: Filter by geographic location using an 'equals' search (case-insensitive, accepts uppercase).
+          example: col
+        - schema:
+            type: string
+          in: query
+          name: currency
+          description: Filter by currency using an 'equals' search (case-insensitive, accepts uppercase).
+          example: cop
+      description: |
+        # Retrieve All Accounts on the Cobre Platform
+
+        This endpoint is your gateway to obtaining a comprehensive list of all accounts currently established on the Cobre platform. Designed with privacy and security at the forefront, this API incorporates advanced features to safeguard sensitive information.
+
+        ## Enhanced Privacy Features
+
+        To ensure the utmost protection of confidential data, the API is equipped with functionality to obscure any sensitive information within the account details. By leveraging the `balance` and `sensitive_data` parameters, you have the flexibility to customize the API's response format to suit your specific requirements, ensuring that sensitive account details are presented in a secure manner.
+
+        This feature not only provides peace of mind regarding data security but also allows for tailored information retrieval, making it easier than ever to manage account information safely and efficiently.
+
+        > The endpoint will list both financial institution accounts and Cobre Balances. If you wish to only to retrieve the Cobre Balances accounts, you would need to filter by provider_id
+      security:
+        - Authorization: []
+  /accounts/{acct_id}:
+    parameters:
+      - name: acct_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the account
+
+    get:
+      summary: Obtain one connected account
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/AccountCreated'
+      operationId: get-accounts-acct_id
+      x-stoplight:
+        id: nx75a3lg1876h
+      description: |+
+
+        ## Enhanced Privacy Features
+
+        To ensure the utmost protection of confidential data, the API is equipped with functionality to obscure any sensitive information within the account details. By leveraging the `balance` and `sensitive_data` parameters, you have the flexibility to customize the API's response format to suit your specific requirements, ensuring that sensitive account details are presented in a secure manner.
+
+        This feature not only provides peace of mind regarding data security but also allows for tailored information retrieval, making it easier than ever to manage account information safely and efficiently.
+
+      parameters:
+        - schema:
+            type: boolean
+            default: false
+          in: query
+          name: sensitive_data
+          description: parameter to include sensitive data
+        - schema:
+            type: boolean
+            default: false
+          in: query
+          name: balance
+          description: parameter to include the balance
+  /transactions:
+    get:
+      summary: Obtain all client transactions
+      tags: []
+      responses:
+        '200':
+          description: Response of the transactions API
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trx_list'
+        '409':
+          description: Conflict
+      operationId: get-accounts-transactions
+      x-stoplight:
+        id: xlcqlw6fiftbz
+      description: |+
+        This endpoint allows you to retrieve all transactions of a client. A transaction reflects a movement (credit or debit) that has occurred in your account.
+
+        > The response will include transactions from all accounts the client has created or connected.
+
+
+        Please refer to the [transaction type](/docs/Transaction-types-catalog.md) catalog for a list of all possible transaction types within the platform.
+
+
+        ## Key Features
+
+        - **Sensitive Data management:** This API will return sensitive data (Which differ depending on the transaction type) masked for increased security. If the sensitive data is needed the `sensitive_data=true` parameter will need to be added into the API request.
+
+        ### Dates Filters
+
+        Cobre offers different types of dates in its transactions to enable full traceability throughout all stages — from the moment a transaction is created on our platform to the point it affects the account balance.
+        The different types of dates are:
+
+
+        Date Type | Description |
+        ---------|----------|
+         `date` | Date on which the transaction was made.  |
+         `operation_date` | The date on which the transaction was processed and affected the account balance. |
+
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: sensitive_data
+          description: parameter to include sensitive data
+        - schema:
+            type: string
+          in: query
+          name: type
+          description: type of transaction
+        - schema:
+            type: string
+          in: query
+          name: amount
+          description: amount of the transaction. Will look up for an exact match
+        - schema:
+            type: string
+          in: query
+          name: amount_lte
+          description: amount of the transaction, less than or equal to the amount
+        - schema:
+            type: string
+          in: query
+          name: amount_gte
+          description: amount of the transaction, greater than or equal to the amount
+        - schema:
+            type: string
+          in: query
+          name: date
+          description: 'Returns all transactions for a specific transaction_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+          in: query
+          name: date_gte
+          description: 'Returns all transactions on or after a specific transaction_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+          in: query
+          name: credit_debit_type
+          description: credit or debit transaction
+        - schema:
+            type: string
+          in: query
+          name: operation_date
+          description: 'Returns all transactions for a specific operational_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+          in: query
+          name: operation_date_gte
+          description: 'Returns all transactions on or after a specific operational_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+          in: query
+          name: operation_date_lte
+          description: 'Returns all transactions on or before a specific operational_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+    parameters: []
+  /accounts/{acct_id}/transactions:
+    get:
+      summary: Obtain account transactions
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/listOfTrx'
+      operationId: get-accounts-acct_id-transactions
+      x-stoplight:
+        id: feybjjnkwaerg
+      description: |+
+        This endpoint allows you to retrieve all transactions for a given account. A transaction reflects a movement (credit or debit) that has occurred in your account.
+
+        Please refer to the [transaction type](/docs/Transaction-types-catalog.md) catalog for a list of all possible transaction types within the platform.
+
+
+        ## Key Features
+
+        - **Sensitive Data management:** This API will return sensitive data (Which differ depending on the transaction type) masked for increased security. If the sensitive data is needed the `sensitive_data=true` parameter will need to be added into the API request.
+
+        ### Dates Filters
+
+        Cobre offers different types of dates in its transactions to enable full traceability throughout all stages — from the moment a transaction is created on our platform to the point it affects the account balance.
+        The different types of dates are:
+
+
+        Date Type | Description |
+        ---------|----------|
+         `date` | Date on which the transaction was made.  |
+         `operation_date` | The date on which the transaction was processed and affected the account balance. |
+
+      security:
+        - Authorization: []
+      parameters:
+        - schema:
+            type: boolean
+            default: false
+            example: true
+          in: query
+          name: sensitive_data
+          description: parameter to include sensitive data
+        - schema:
+            type: string
+            enum:
+              - spei_credit
+              - spei_debit
+              - spei_return
+              - internal_spei_credit
+              - internal_spei_debit
+              - mex_credit
+              - mex_debit
+              - col_credit
+              - col_debit
+              - adjustment_credit
+              - adjustment_debit
+              - misc_debit
+              - misc_credit
+            example: spei_credit
+          in: query
+          name: type
+          description: type of transaction
+        - schema:
+            type: string
+            example: '3000'
+          in: query
+          name: amount
+          description: amount of the transaction. Will look up for an exact match
+        - schema:
+            type: string
+            example: '50000'
+          in: query
+          name: amount_lte
+          description: amount of the transaction, less than or equal to the amount
+        - schema:
+            type: string
+            example: '300'
+          in: query
+          name: amount_gte
+          description: amount of the transaction, greater than or equal to the amount
+        - schema:
+            type: string
+            pattern: ^(\d{4})-(\d{2})-(\d{2})$
+            example: '2024-07-01'
+          in: query
+          name: date
+          description: 'Returns all transactions for a specific transaction_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+            pattern: ^(\d{4})-(\d{2})-(\d{2})$
+            example: '2024-07-01'
+          in: query
+          name: date_lte
+          description: 'Returns all transactions on or before a specific transaction_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+            pattern: ^(\d{4})-(\d{2})-(\d{2})$
+            example: '2024-07-07'
+          in: query
+          name: date_gte
+          description: 'Returns all transactions on or after a specific transaction_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+            example: credit
+            enum:
+              - credit
+              - debit
+          in: query
+          name: credit_debit_type
+          description: credit or debit transaction
+        - schema:
+            type: string
+          in: query
+          name: operation_date
+          description: 'Returns all transactions for a specific operational_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+          in: query
+          name: operation_date_gte
+          description: 'Returns all transactions on or after a specific operational_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+        - schema:
+            type: string
+          in: query
+          name: operation_date_lte
+          description: 'Returns all transactions on or before a specific operational_date. Allowed date formats: YYYY-MM-DD and YYYY-MM-DDTHH:MM:SSZ'
+    parameters:
+      - schema:
+          type: string
+        name: acct_id
+        in: path
+        required: true
+        description: Unique identifier of the account
+  /accounts/{acct_id}/transactions/{trx_id}:
+    parameters:
+      - schema:
+          type: string
+        name: acct_id
+        in: path
+        required: true
+        description: Unique identifier of the account
+      - schema:
+          type: string
+        name: trx_id
+        in: path
+        required: true
+        description: Unique identifier of the transaction
+    get:
+      summary: Obtain one transaction
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Trx'
+      operationId: get-accounts-acct_id-transactions-trx_id
+      x-stoplight:
+        id: zwh9ch6q885zu
+      description: |
+        ## Key Features
+
+        - **Sensitive Data management:** This API will return sensitive data (Which differ depending on the transaction type) masked for increased security. If the sensitive data is needed the `sensitive_data=true` parameter will need to be added into the API request.
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: sensitive_data
+          description: parameter to include sensitive data
+components:
+  schemas:
+    Account_request:
+      type: object
+      title: Request an account
+      x-stoplight:
+        id: wqxxbmo55jm0h
+      required:
+        - provider_id
+        - action
+        - metadata
+      properties:
+        provider_id:
+          type: string
+          description: Provider ID that is related with the account
+          example: PR_MEX_1234
+        action:
+          type: string
+          enum:
+            - connect
+          description: Action to perform with the given provider, either create or connect an account
+          example: connect
+        account_type:
+          type: string
+          enum:
+            - clabe
+            - cc
+            - ch
+          description: Type of account that will be connected. Only required for CONNECT accounts. Will vary depending on the geo.
+        tags:
+          type: array
+          maxItems: 10
+          description: Tags assigned by the user to identify and personalize the account
+          items:
+            type: string
+            example: accounting
+        metadata:
+          description: Optional field required for certain providers when creating or connecting accounts
+          oneOf:
+            - $ref: '#/components/schemas/Account_request-CONNECT-metadata_mex'
+            - $ref: '#/components/schemas/Account_request-CONNECT-metadata_col'
+        alias:
+          type: string
+          description: Nickname provided by the user at the time of creation of the account resource
+          example: My first Cobre Account
+    Account_request-CONNECT-metadata_mex:
+      type: object
+      x-stoplight:
+        id: 69e40193a75b2
+      x-examples: {}
+      x-internal: false
+      title: CONNECT - Mexican account Metadata
+      required:
+        - account_number
+        - account_holder_id_type
+        - account_holder_id_number
+      properties:
+        account_number:
+          type: string
+          example: '072122333322221111'
+          maxLength: 18
+          minLength: 18
+          description: Mexican account number that you wish to connect
+        account_holder_id_type:
+          enum:
+            - rfc
+          description: Type of identification of the account holder
+        account_holder_id_number:
+          type: string
+          example: XEXX01010100
+          description: Identification number of the account holder
+          minLength: 12
+          maxLength: 12
+    Account_request-CONNECT-metadata_col:
+      type: object
+      x-stoplight:
+        id: 31e5x7s367byt
+      x-examples:
+        Example 1:
+          account_number: '072180012338876994'
+          account_type: clabe
+          account_holder_id_type: RFC
+          account_holder_id_number: DOSJ850XXX
+      x-internal: false
+      title: CONNECT - Colombian Account Metadata
+      required:
+        - account_number
+        - account_holder_id_type
+        - account_holder_id_number
+      properties:
+        account_number:
+          type: string
+          example: '00222217000166665555'
+          maxLength: 25
+          description: Colombian account number that you want to connect
+        account_holder_id_type:
+          enum:
+            - nit
+          description: Type of identification of the account holder
+        account_holder_id_number:
+          type: string
+          example: '0123456789'
+          minLength: 10
+          description: Identification number of the account holder. Nit provided has to be 10 digits - including the verification digit.
+          maxLength: 10
+    Account_response_list:
+      title: List of accounts
+      x-stoplight:
+        id: j1uyqlk4cjj2n
+      type: object
+      properties:
+        total_items:
+          type: number
+          description: total number of items in returned by the API
+        total_pages:
+          type: number
+          description: number of pages with the current size of the page
+          default: 1
+        is_last_page:
+          type: boolean
+          description: true/false to describe if the current page is the last page
+          default: false
+        page_items:
+          type: number
+          description: number of items in the current page. Default 50.
+          default: 50
+        contents:
+          x-stoplight:
+            id: mojbkdrz8yz8s
+          oneOf:
+            - $ref: '#/components/schemas/Account_response-CONNECT-metadata_mex'
+              x-stoplight:
+                id: 6j7p5eu6de6f8
+            - $ref: '#/components/schemas/Account_response-CONNECT-metadata_col'
+              x-stoplight:
+                id: ouqna9c8rotx7
+    Account_response-CONNECT-metadata_mex:
+      type: object
+      title: Account Connect MEX Response
+      x-stoplight:
+        id: js6xvkupfbfg2
+      x-internal: false
+      required:
+        - id
+        - provider_id
+        - provider_name
+        - connectivity
+        - alias
+        - metadata
+        - account_number
+        - account_type
+        - obtained_balance
+        - obtained_balance_at
+        - geo
+        - currency
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          example: acc_1212534tdfgs
+          description: 'Unique ID assigned by Cobre to each account resource. Format: acc_ + unique ID'
+        provider_id:
+          type: string
+          example: pr_mex_072
+          description: ID used to link the account to the provider
+        provider_name:
+          type: string
+          example: Banorte
+          description: Friendly name of the provider
+        connectivity:
+          type: object
+          description: Possible statuses of an account
+          required:
+            - status
+          properties:
+            status:
+              type: string
+              enum:
+                - connecting
+                - connected
+                - disconnected
+                - failed
+              example: connected
+              description: Detailed account status
+            description:
+              type: string
+              description: Verbatim description of the status account (if applicable)
+        alias:
+          type: string
+          example: My first Cobre account!
+          description: Nickname provided by the user at creation
+        metadata:
+          type: object
+          description: Provider-specific metadata needed to operate account services
+          properties:
+            available_services:
+              type: array
+              description: List of available services related to the account
+              items:
+                type: string
+                example: mm_push_from_account
+              example:
+                - mm_push_from_account
+        account_number:
+          type: string
+          example: '072180303222222222'
+          description: Account number (format depends on provider)
+        account_type:
+          type: string
+          enum:
+            - clabe
+          example: clabe
+          description: Account type from a dictionary of possible account types
+        obtained_balance:
+          type: integer
+          example: 10000
+          default: 0
+          description: Balance in the smallest currency unit
+        obtained_balance_at:
+          type: string
+          format: date-time
+          example: '2024-07-05T11:21:34Z'
+          description: Timestamp when the obtained balance was received
+        geo:
+          type: string
+          example: mex
+          description: Account country in ISO 3166-3 format
+        tags:
+          type: array
+          maxItems: 10
+          description: Tags assigned by the user
+          items:
+            type: string
+            example: accounting
+        currency:
+          type: string
+          example: mxn
+          description: Currency in which the account is denominated
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-06-17T17:34:50Z'
+          description: Datetime when the account resource was created in Cobre's system (UTC)
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-05T11:21:34Z'
+          description: Datetime when the account resource was last updated in Cobre's system (UTC)
+    Account_response-CONNECT-metadata_col:
+      type: object
+      title: Account Connect COL Response
+      x-stoplight:
+        id: 7e3t6upz4y3my
+      x-internal: false
+      required:
+        - id
+        - provider_id
+        - provider_name
+        - connectivity
+        - alias
+        - metadata
+        - account_number
+        - account_type
+        - obtained_balance
+        - obtained_balance_at
+        - geo
+        - currency
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          example: acc_1212534tdfgs
+          description: 'Unique ID assigned by Cobre to each account resource. Format: acc_ + unique ID'
+        provider_id:
+          type: string
+          example: pr_col_1007
+          description: ID used to link the account to the provider
+        provider_name:
+          type: string
+          example: Bancolombia
+          description: Friendly name of the provider
+        connectivity:
+          type: object
+          description: Possible statuses of an account
+          required:
+            - status
+          properties:
+            status:
+              type: string
+              enum:
+                - connecting
+                - connected
+                - disconnected
+                - failed
+              default: connecting
+              example: connected
+              description: Detailed account status
+            description:
+              type: string
+              description: Verbatim description of the account status (if applicable)
+        alias:
+          type: string
+          example: My first Cobre account!
+          description: Nickname provided by the user at creation
+        metadata:
+          type: object
+          description: Provider-specific metadata needed to operate account services
+          properties:
+            available_services:
+              type: array
+              description: List of available services related to the account
+              items:
+                type: string
+                example: mm_push_from_account
+              example:
+                - mm_push_from_account
+        account_number:
+          type: string
+          example: '69022221111'
+          description: Account number (format depends on provider)
+        account_type:
+          type: string
+          enum:
+            - cc
+            - ch
+          example: cc
+          description: Account type from a dictionary of possible account types
+        obtained_balance:
+          type: integer
+          example: 10000
+          default: 0
+          description: Balance in the smallest currency unit
+        obtained_balance_at:
+          type: string
+          format: date-time
+          example: '2024-07-05T11:21:34Z'
+          description: Timestamp when the obtained balance was received
+        geo:
+          type: string
+          example: col
+          description: Account country in ISO 3166-3 format
+        tags:
+          type: array
+          maxItems: 10
+          description: Tags assigned by the user
+          items:
+            type: string
+            example: accounting
+        currency:
+          type: string
+          example: cop
+          description: Currency in which the account is denominated
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-06-17T17:34:50Z'
+          description: Datetime when the account resource was created (UTC)
+        updated_at:
+          type: string
+          format: date-time
+          example: '2024-07-05T11:21:34Z'
+          description: Datetime when the account resource was last updated (UTC)
+    trx_list:
+      title: List of Transactions
+      x-stoplight:
+        id: 7x08x51rzkl5t
+      type: object
+      properties:
+        total_items:
+          type: number
+          description: total number of items in returned by the API
+          example: 1
+        total_pages:
+          type: number
+          description: number of pages with the current size of the page
+          default: 1
+        is_last_page:
+          type: boolean
+          description: true/false to describe if the current page is the last page
+          default: false
+        page_items:
+          type: number
+          description: number of items in the current page. Default 50.
+          default: 50
+        contents:
+          description: 'Array of contents '
+          oneOf:
+            - $ref: '#/components/schemas/trx_MEX'
+              x-stoplight:
+                id: dajmjit3o9dfr
+    trx_MEX:
+      type: object
+      x-stoplight:
+        id: qu2b0adaiximy
+      x-examples:
+        Example 1:
+          id: trx_1234123
+          type: SPEI_CREDIT
+          amount: 100
+          currency: mxn
+          credit_debit_type: credit
+          date: '2019-08-24T14:15:22Z'
+          metadata: {}
+      title: Transaction list in Mexico
+      properties:
+        id:
+          type: string
+          description: |
+            id of the transaction
+          example: trx_3gj0LD1CAwJOhw5teh5f
+        type:
+          description: Type of the transaction
+          enum:
+            - spei_credit
+            - spei_debit
+            - spei_return
+            - internal_credit
+            - internal_debit
+            - mex_credit
+            - mex_debit
+            - adjustment_credit
+            - adjustment_debit
+            - misc_credit
+            - misc_debit
+        amount:
+          type: integer
+          description: 'Amount of the transaction. represented on the smallest unit of the currency. Example: 100mxn will be represented as 10000.'
+          example: 16
+        currency:
+          description: currency of the transaction
+          enum:
+            - mxn
+            - cop
+        credit_debit_type:
+          description: Credit or Debit
+          enum:
+            - credit
+            - debit
+        transaction_date:
+          type: string
+          description: Date when the transaction was created in origin
+          format: date-time
+          example: '2024-06-07T19:13:15Z'
+          x-stoplight:
+            id: avu0vcjaqsqix
+        created_date:
+          type: string
+          x-stoplight:
+            id: 2gmwe59fhf6kt
+          format: date-time
+          example: '2024-06-07T19:13:15Z'
+          description: Date when the transaction has been created on the platform
+    trx_metadata_spei_credit:
+      type: object
+      x-stoplight:
+        id: l05720fno5ys9
+      x-examples:
+        Example 1:
+          sender_name: ''
+          sender_id: ''
+          description: ''
+          intended_beneficiary_name: ''
+          intended_beneficiary_id: ''
+          sender_account_number: '444333222111'
+          tracking_key: '20211012123456789009875'
+          reference: '1234567'
+      title: SPEI Credit transaction
+      properties:
+        sender_name:
+          type: string
+          description: sender name in the issuing financial institution
+          example: Fernando Alonso
+        sender_id:
+          type: string
+          description: sender id
+          example: XEXX010101000
+        description:
+          type: string
+          description: description of the payment
+          example: SPEI Payment
+        intended_beneficiary_name:
+          type: string
+          description: Name added by the payment issuer into the payment instruction
+          example: Lewis Hamilton
+        intended_beneficiary_id:
+          type: string
+          description: id of the beneficiary of the payment added by the issuer
+          example: XEXX010101000
+        sender_account_number:
+          type: string
+          description: sender account number
+          example: '1000100010001000'
+        tracking_key:
+          type: string
+          description: tracking key of the transaction in the SPEI network
+          example: 20240719CCbbbb6AAAAAA
+        reference:
+          type: string
+          description: |
+            reference of the payment in the SPEI network
+          example: '098573'
+    trx_metadata_spei_debit:
+      type: object
+      x-examples:
+        Example 1:
+          description: ''
+          beneficiary_account_number: '444333222111'
+          tracking_key: '20211012123456789009875'
+          reference: '1234567'
+          money_movement_id: mm_123141412
+      title: SPEI debit transaction
+      x-stoplight:
+        id: wvlkztngvzwhs
+      properties:
+        description:
+          type: string
+          description: Description of the transaction
+          example: My SPEI payment!
+        beneficiary_account_number:
+          type: string
+          description: Beneficiary account number used to transfer the funds
+          example: '1000100010001000'
+        tracking_key:
+          type: string
+          description: tracking key of the money movement
+          example: 20240719CCbbbb6AAAAAA
+        reference:
+          type: string
+          description: reference of the SPEI money movement
+          example: '098656'
+        money_movement_id:
+          type: string
+          description: money movement Id
+          example: mm_09876654
+    trx_metadata_spei_return:
+      type: object
+      x-examples:
+        Example 1:
+          money_movement_id: mm_eXZ5coI8HqKHwB
+          tracking_key: '123124324234242'
+      title: SPEI return transaction
+      x-stoplight:
+        id: jramdiyc5hl4w
+      properties:
+        money_movement_id:
+          type: string
+          description: Id of the original money movement that created this transaction
+          example: mm_09876gst
+        tracking_key:
+          type: string
+          description: tracking key of the transaction
+          example: 20240719CCbbbb6AAAAAA
+    trx_metadata_spei_card_debit:
+      type: object
+      x-examples:
+        Example 1:
+          reference: ''
+          money_movement_id: mm_Ujy5WTwg0Mgpnz
+          description: Demo con ops 2024-05-30T23:03:18.595Z
+          beneficiary_account_number: '************1642'
+          tracking_key: ''
+      title: SPEI card debit
+      x-stoplight:
+        id: n2n9oitg1qbs8
+      properties:
+        reference:
+          type: string
+          description: reference added in the money movement request
+          example: '0987644'
+        money_movement_id:
+          type: string
+          description: id of the money movement
+          example: mm_098875664
+        description:
+          type: string
+          description: description provided at the time of creation
+          example: SPEI transaction
+        beneficiary_account_number:
+          type: string
+          description: beneficiary card number 16 digits PAN. Always masked.
+          example: '1000100010001000'
+        tracking_key:
+          type: string
+          description: tracking key of the SPEI payment
+          example: 20240719CCbbbb6AAAAAA
+    trx_metadata_internal_spei_credit:
+      type: object
+      x-examples:
+        Example 1:
+          sender_name: ''
+          sender_id: ''
+          description: ''
+          intended_beneficiary_name: ''
+          intended_beneficiary_id: ''
+          sender_account_number: '444333222111'
+          tracking_key: '20211012123456789009875'
+          reference: '1234567'
+      title: Internal SPEI Credit transaction
+      x-stoplight:
+        id: alj0ksy6lozkm
+      properties:
+        sender_name:
+          type: string
+          description: sender name in the issuing financial institution
+          example: Fernando Alonso
+        sender_id:
+          type: string
+          description: sender id
+          example: XEXX010101000
+        description:
+          type: string
+          description: description of the payment
+          example: My Spei Payment
+        sender_account_number:
+          type: string
+          description: sender account number
+          example: '1000100010001000'
+        tracking_key:
+          type: string
+          description: tracking key of the transaction in the SPEI network
+          example: 20240719CCbbbb6AAAAAA
+        reference:
+          type: string
+          description: |
+            reference of the payment in the SPEI network
+          example: '123456'
+    trx_metadata_internal_spei_debit:
+      type: object
+      x-stoplight:
+        id: 42nvjp81zkcey
+      x-examples:
+        Example 1:
+          description: ''
+          beneficiary_account_number: '444333222111'
+          tracking_key: '20211012123456789009875'
+          reference: '1234567'
+          money_movement_id: mm_123141412
+      title: Internal SPEI debit transaction
+      properties:
+        description:
+          type: string
+          description: Description of the transaction
+          example: My SPIE Payment
+        beneficiary_account_number:
+          type: string
+          description: Beneficiary account number used to transfer the funds
+          example: '1000100010001000'
+        tracking_key:
+          type: string
+          description: tracking key of the money movement
+          example: 20240719CCbbbb6AAAAAA
+        reference:
+          type: string
+          description: reference of the SPEI money movement
+          example: '0987644'
+        money_movement_id:
+          type: string
+          description: money movement Id
+          example: mm_0987653
+    trx_metadata_mex_credit:
+      type: object
+      x-stoplight:
+        id: v3qdpmhkf4l5q
+      x-examples:
+        Example 1:
+          reference: ''
+          money_movement_id: mm_Ujy5WTwg0Mgpnz
+          description: Demo con ops 2024-05-30T23:03:18.595Z
+          beneficiary_account_number: '************1642'
+          tracking_key: ''
+      title: Mexican FI Credit transaction
+      properties:
+        description:
+          type: string
+          description: description provided at the time of creation
+          example: Transaction made from my Bank
+    trx_metadata_mex_debit:
+      type: object
+      x-stoplight:
+        id: xj0sijjvr5w79
+      x-examples:
+        Example 1:
+          reference: ''
+          money_movement_id: mm_Ujy5WTwg0Mgpnz
+          description: Demo con ops 2024-05-30T23:03:18.595Z
+          beneficiary_account_number: '************1642'
+          tracking_key: ''
+      title: Mexican FI Debit transaction
+      properties:
+        description:
+          type: string
+          description: Description provided at the time of creation
+          example: Transaction made from my Bank
+    trx_metadata_col_credit:
+      type: object
+      x-stoplight:
+        id: qtdrmvoaf7t53
+      x-examples:
+        Example 1:
+          reference: ''
+          money_movement_id: mm_Ujy5WTwg0Mgpnz
+          description: Demo con ops 2024-05-30T23:03:18.595Z
+          beneficiary_account_number: '************1642'
+          tracking_key: ''
+      title: Colombian FI Credit transaction
+      properties:
+        description:
+          type: string
+          description: description provided at the time of creation
+          example: Transaction made from my Bank
+    trx_metadata_col_debit:
+      type: object
+      x-stoplight:
+        id: urwiwemrbtl0p
+      x-examples:
+        Example 1:
+          reference: ''
+          money_movement_id: mm_Ujy5WTwg0Mgpnz
+          description: Demo con ops 2024-05-30T23:03:18.595Z
+          beneficiary_account_number: '************1642'
+          tracking_key: ''
+      title: Colombian FI Debit transaction
+      properties:
+        description:
+          type: string
+          description: Description provided at the time of creation
+          example: Transaction made from my Bank
+    trx_metadata_adj_credit:
+      type: object
+      x-stoplight:
+        id: 151pwhgqjxagm
+      x-examples:
+        Example 1:
+          reference: ''
+          money_movement_id: mm_Ujy5WTwg0Mgpnz
+          description: Demo con ops 2024-05-30T23:03:18.595Z
+          beneficiary_account_number: '************1642'
+          tracking_key: ''
+      title: Adjustment Credit
+      properties:
+        description:
+          type: string
+          description: Description provided at the time of creation
+          example: Adjustment made to this account
+    trx_metadata_adj_debit:
+      type: object
+      x-stoplight:
+        id: av2dykw7a8crl
+      x-examples:
+        Example 1:
+          reference: ''
+          money_movement_id: mm_Ujy5WTwg0Mgpnz
+          description: Demo con ops 2024-05-30T23:03:18.595Z
+          beneficiary_account_number: '************1642'
+          tracking_key: ''
+      title: Adjustment Debit
+      properties:
+        description:
+          type: string
+          description: Description provided at the time of creation
+          example: Adjustment made to this account
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+  requestBodies:
+    Account-Creation-Request:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Account_request'
+          examples: {}
+  responses:
+    AccountCreated:
+      description: ''
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/Account_response-CONNECT-metadata_mex'
+                x-stoplight:
+                  id: 0l6yrlegi1i5c
+              - $ref: '#/components/schemas/Account_response-CONNECT-metadata_col'
+                x-stoplight:
+                  id: x7egp5xmjz2q4
+            type: object
+          examples: {}
+      headers:
+        Content-Type:
+          schema:
+            type: string
+          description: application/json
+    listOfTrx:
+      description: Response of the transactions API
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/trx_list'
+      headers:
+        Content-Type:
+          schema:
+            type: string
+          description: application/json
+    Trx:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/trx_MEX'
+                x-stoplight:
+                  id: exv08ikuaftbd
+
+    List_Accounts:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Account_response_list'
+    409-Error:
+      description: Example response
+security:
+  - Authorization: []

@@ -1,83 +1,160 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Cobre",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#212121",
+    "light": "#F1F0EC",
+    "dark": "#212121"
   },
-  "favicon": "/favicon.svg",
+  "background": {
+    "color": {
+      "light": "#f1f0ec",
+      "dark": "#212121"
+    }
+  },
+  "appearance": {
+    "default": "light"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Tiro Gurmukhi"
+    }
+  },
+  "favicon": "/favicon.png",
   "navigation": {
-    "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
-      }
-    ],
+  "languages": [
+    {
+      "language": "en",
+      "tabs": [
+        {
+          "tab": "Home",
+          "icon": "house",
+          "pages": [
+            "index"
+          ]
+        },
+        {
+          "tab": "Guides",
+          "icon": "book",
+          "groups": [
+            {
+              "group": "Migration V2 to V3",
+              "pages": [
+                "docs/cobre-guides/transition-from-cobre-v2-to-cobre-v3"
+              ]
+            },
+            {
+              "group": "Portal Guides",
+              "pages": [
+                "docs/cobre-guides/authentication-in-portal",
+                "docs/cobre-guides/h6pj8brq3058b-account-and-balance-management",
+                "docs/cobre-guides/de6kt68cuep31-approval-process-maker-checker",
+                "docs/cobre-guides/zxsxms2lh9o30-bulk-money-movement-initiation"
+              ]
+            },
+            {
+              "group": "Product Guides",
+              "pages": [
+                "docs/product-guides/main-concepts",
+                "docs/product-guides/payout-example-guide"
+              ]
+            }
+          ]
+        },
+        {
+          "tab": "Platform V3 APIs",
+          "icon": "code",
+          "groups": [
+            {
+              "group": "Cobre Balances",
+              "pages": [
+                "docs/Platformv3/rw1phqdmeljsl-cobre-balance-accounts",
+                "api-reference/obtain-all-accounts",
+                "api-reference/create-a-cobre-balance",
+                "api-reference/obtain-one-account",
+                "api-reference/close-a-cobre-balance",
+                "api-reference/obtain-all-client-transactions",
+                "api-reference/obtain-account-transactions",
+                "api-reference/obtain-one-transaction",
+                "api-reference/obtain-account-daily-balance-history",
+                "api-reference/assign-and-change-primary-account",
+                "api-reference/unlinking-primary-account"
+              ]
+            },
+            {
+              "group": "Accounts",
+              "pages": [
+                "docs/Platformv3/2sp3194o5f34j-accounts-api",
+                "api-reference/accounts/obtain-all-connected-accounts",
+                "api-reference/accounts/connect-an-account",
+                "api-reference/accounts/obtain-one-connected-account",
+                "api-reference/accounts/obtain-all-client-transactions",
+                "api-reference/accounts/obtain-account-transactions",
+                "api-reference/accounts/obtain-one-transaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "language": "es",
+      "tabs": [
+        {
+          "tab": "Inicio",
+          "icon": "house",
+          "pages": [
+            "docs/es/index"
+          ]
+        },
+        {
+          "tab": "Platform V3 APIs",
+          "icon": "code",
+          "groups": [
+            {
+              "group": "Cobre Balances",
+              "pages": [
+                "docs/Platformv3/rw1phqdmeljsl-cobre-balance-accounts",
+                "api-reference/obtain-all-accounts",
+                "api-reference/create-a-cobre-balance",
+                "api-reference/obtain-one-account",
+                "api-reference/close-a-cobre-balance",
+                "api-reference/obtain-all-client-transactions",
+                "api-reference/obtain-account-transactions",
+                "api-reference/obtain-one-transaction",
+                "api-reference/obtain-account-daily-balance-history",
+                "api-reference/assign-and-change-primary-account",
+                "api-reference/unlinking-primary-account"
+              ]
+            },
+            {
+              "group": "Accounts",
+              "pages": [
+                "docs/Platformv3/2sp3194o5f34j-accounts-api",
+                "api-reference/accounts/obtain-all-connected-accounts",
+                "api-reference/accounts/connect-an-account",
+                "api-reference/accounts/obtain-one-connected-account",
+                "api-reference/accounts/obtain-all-client-transactions",
+                "api-reference/accounts/obtain-account-transactions",
+                "api-reference/accounts/obtain-one-transaction"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "About Us",
+          "href": "https://www.cobre.com/en/about-us",
+          "icon": "users"
         },
         {
           "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
+          "href": "https://www.cobre.com/blog",
           "icon": "newspaper"
         }
       ]
@@ -85,19 +162,20 @@
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "https://www.cobre.com/en"
   },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Log In",
+        "href": "https://portal.cobre.co/login?__hstc=195675891.d089a3a4f59a6f28a5909a2ab831762b.1761133102927.1761133102927.1761133102927.1&__hssc=195675891.1.1761133102928&__hsfp=2385172338"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Contact sales",
+      "href": "https://www.cobre.com/en#contact-us"
     }
   },
   "contextual": {
@@ -114,9 +192,10 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/trycobre",
+      "instagram": "https://www.instagram.com/cobre.co",
+      "youtube": "https://www.youtube.com/@cobreoficial",
+      "linkedin": "https://www.linkedin.com/company/cobrefintech/"
     }
   }
 }

@@ -1,0 +1,120 @@
+---
+title: "Bulk Money Movement Initiation"
+---
+
+## Overview
+
+The **Bulk Money Movement** feature simplifies high-volume transactions by enabling users to process multiple payments at once. This functionality reduces manual effort, increases efficiency, and ensures seamless execution of large-scale financial operations.
+
+## Supported File Formats
+
+The portal supports the following file formats to cater to various banking requirements:
+
+| File Format | Bank | Extension |
+| :--- | :--- | :--- |
+| PAB Bancolombia | Bancolombia | .txt |
+| SAP Bancolombia | Bancolombia | .txt |
+| DISFON | Banco de Bogotá | .txt |
+| BBVA | BBVA Colombia | .txt |
+| Banco de Occidente | Banco de Occidente | .txt |
+| Davivienda | Davivienda | .txt |
+| Davivienda | Davivienda | .xlsx |
+| Plantilla Cobre Col (Payouts) | Cobre | .csv |
+| Plantilla Cobre Col (Payouts) | Cobre | .xlsx |
+| Plantilla Cobre Col (Direct Debits) | Cobre | .xlsx |
+| Plantilla Cobre Mex (Payouts) | Cobre | .csv |
+| Plantilla Cobre Mex (Payouts) | Cobre | .xlsx |
+| Plantilla Cobre General | Cobre | .json |
+
+<Tip>
+  **Tip:** Download and use Cobre’s templates for streamlined uploads and fewer errors. These templates include built-in formatting and logic to ensure compliance with platform requirements.
+</Tip>
+
+## How to Initiate a Bulk Payment
+
+<Steps>
+  <Step title="Click 'Create Bulk Payment'">
+Begin by navigating to the money movement section of the portal and selecting the **"Massive money movement"** button.
+</Step>
+  <Step title="Select a File Format">
+  Choose an appropriate format from the supported list or download a Cobre template for guidance.
+  </Step>
+  <Step title="Upload the File">
+  Ensure the file adheres to the following requirements:
+	- Valid format and extension.
+	- Maximum file size of 15MB.
+	If the file fails preliminary checks, such as format or size, an error message will prompt immediate correction.
+  </Step>
+  <Step title="File Validation">
+  After upload, the platform automatically checks the file for:
+	- **Required Fields**:
+		- Source ID
+		- Destination Full Name, ID Type, ID Number (if Destination ID is not provided)
+		- Destination Account Type, Bank Code, Account Number
+		- Amount
+	- **Optional Fields**:
+		- Destination ID, Account Alias
+		- Description (alphanumeric, 1-40 characters)
+		- Reference (mandatory for Mexico, numeric, max 7 characters)
+    <Info>
+      Validation errors are displayed in a user-friendly modal with detailed feedback. Users can navigate through errors (50 items per page) and re-upload corrected files.
+    </Info>
+  </Step>
+  <Step title="Review Summary & Confirm">
+  Upon successful validation, the platform redirects users to a summary view showing:
+	- Total transaction amount.
+	- Number of payments.
+	- Uploaded file name.
+	- A table with individual money movements for detailed verification.
+	Users can also download the uploaded file from this view.
+  </Step>
+  <Step title="Submit or Mark for Approval">
+  Finalize the process based on user roles:
+	- **Creator**: Batches are marked as "por aprobar" and require approval.
+	- **Admin**: Batches are automatically approved unless dual control is active.
+	- **Admin with Dual Control**: Approval from another user is required.
+  </Step>
+</Steps>
+
+### Counterparty Creation Logic
+
+Users can:
+
+- Provide a counterparty ID for pre-created counterparties.
+- Enter full counterparty details if the ID is unavailable. In this case, the system:
+	- Automatically generates a counterparty ID.
+	- Uses idempotency checks to avoid duplicates by recognizing existing counterparties with matching information.
+
+This ensures data consistency and prevents redundant counterparty entries.
+
+### Batch List View
+
+After uploading, users are redirected to the batch list view, featuring:
+
+- Status
+- Total amount
+- Total number of money movements
+- File name
+- Creation date
+
+Users can search batches by file name, view their details, and navigate to the batch detail view for granular transaction data.
+
+### Roles and Permissions
+
+- **Viewer**: Can view batches but cannot upload or approve payments.
+- **Approver**: Can approve or decline batches but cannot upload files.
+- **Creator**: Can upload files but requires another user to approve them.
+- **Admin**: Can upload and approve batches unless Dual Control is active.
+	- **Admin with Dual Control**: Approval from another user is required, even if the admin uploaded the batch.
+
+### Tips and Best Practices
+
+- **Use Cobre Templates:** Reduce errors by downloading and using pre-configured templates.
+- **Validate Before Uploading:** Double-check file formats, extensions, and size to prevent upload errors.
+- **Leverage Error Feedback:** Quickly correct validation errors using the modal and re-upload files.
+- **Verify Transactions Thoroughly:** Use the summary view to ensure all details are accurate before submission.
+- **Maintain Counterparty Records:** Use the idempotency logic to streamline counterparty management and avoid redundancy.
+
+#### Cobre Templates Details
+
+For detailed instructions on how to use and fill Cobre templates, please refer to the [Template Guide](https://doc.clickup.com/9002051280/d/h/8c90tpg-41397/1023f23c89ef0f4). This guide provides all the information needed for successful bulk payment initiation using Cobre’s CSV or JSON formats.

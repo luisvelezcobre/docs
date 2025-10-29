@@ -1,0 +1,107 @@
+---
+title: PayOut Guide
+description: Money movement to withdraw funds from your account. We have different providers to carry out the money movements.
+sidebarTitle: PayOut
+---
+
+## Before you start
+Before getting started, it’s important that you understand some basic concepts we use at Cobre, to help you better understand our products and solutions.
+<Columns col={2}>
+<Card title="Cobre Balance" href="/docs/product-guides/main-concepts#cobre-balance" cta="Learn more">
+It’s a type of account—specifically, a virtual account—that allows you to carry out different types of money movements.
+</Card>
+<Card title="Counterparty" href="/docs/product-guides/main-concepts#counterparty" cta="Learn more">
+Is an entity, either an individual or a company, involved in a money movement.
+</Card>
+<Card title="Transactions">
+A transaction reflects a movement (credit or debit) that has occurred in your account.
+</Card>
+<Card title="Money Market">
+A money movement identifies the operation between parties, whether it's a PayIn, a PayOut, or a CBP.
+</Card>
+</Columns>
+
+
+## PayOut
+<Info>
+**Move Movement Type:** BreB Key (CO), Fast Pay (CO), ACH (CO) and SPEI (MX).<br/>
+**Countries Available:** Colombia and México
+</Info>
+
+### ACH / Fast Pay (CO) _(Recommended)_
+The money movement goes from an account of type `cobre_balance` to a counterparty or account of type `cobre_balance`, `checking (cc)`, `saving (ch)` or `electronic deposit (dp)`. _Faster payments that settle almost real-time._
+<br/><br/>This type allows money movement between `cobre_balance` accounts / counterparties.
+
+<Frame>
+    <img src="/images/fast-pay-diagram.png" alt="Fast Pay Diagram Flow" />
+</Frame>
+
+### BreB Key (CO) _(Recommended)_
+The money movement goes from an account of type `cobre_balance`, `checking (cc)` or `saving (ch)` to a counterparty of type `BreB (breb_key)`.
+<Frame>
+    <img src="/images/breb-diagram.png" alt="BreB Diagram Flow" />
+</Frame>
+### SPEI (MX)
+The money movement goes from an account of type clabe to a counterparty or account of type clabe or spei_card. Account-to-account money movement utilizing the SPEI real-time payments network. This type doesn’t allow money movement between cobre_balance accounts / counterparties.
+<Frame>
+    <img src="/images/spei-diagram.png" alt="SPEI Diagram Flow" />
+</Frame>
+
+
+## Additional Features
+### Authentication
+Cobre's Authentication API is designed specifically for clients to interact with Cobre with the best, most-secured, and frictionless authentication capabilities, in this way, facilitating access to the Cobre Move Money platform. This API simplifies the process of authentication by leveraging a straightforward approach that requires only a user_id and a secret. These credentials, obtained within the Cobre ecosystem, guarantee a secure and efficient authentication pathway.
+
+<Steps>
+<Step title="Obtain API Credentials">
+Before you can authenticate, you must obtain the necessary API credentials: a user_id and a secret. These credentials are provided within the Cobre ecosystem, ensuring a secure and straightforward way to access the platform.
+</Step>
+<Step title="Authenticate with the Platform">
+With your API credentials in hand, use them to authenticate with the platform. Send a request to the authentication API endpoint, including your user_id and secret. Upon successful authentication, the API will return a JSON Web Token (JWT).
+</Step>
+<Step title="Refresh Token">
+It is very important to implement a token refresh scheme based on its expiration time. This way, you avoid having to update it manually (which is not practical) and also prevent generating a new token every time you call an API (which is inefficient and not recommended).
+</Step>
+</Steps>
+
+<Frame>
+    <img src="/images/authentication-diagram.png" alt="Authentication Diagram Flow" />
+</Frame>
+<Note>
+**IMPORTANT**: These points are reviewed during the Integration Certification
+</Note>
+### Webhook
+The Cobre Notifications Service serves as a centralized hub for event subscriptions, ensuring clients stay updated on various platform events. With an extensive events directory, users can subscribe to their preferred events and receive timely notifications through their chosen url via webhooks. These notifications adhere to a standard schema, providing all essential event details.
+
+<Accordion title="Events" defaultOpen>
+Each of these services manages different notifications you can subscribe to, depending on the integrated product and the statuses you're interested in receiving:
+- Accounts
+- Money Movements
+- Cross Border Money Movements
+- Bulk Money Movements
+- Reportes
+</Accordion>
+
+<Note>
+**IMPORTANT**: The Webhooks implementation is reviewed during the Integration Certification
+</Note>
+### Reports
+Cobre's Reports API is designed to provide seamless access to detailed financial and operational data through a set of versatile endpoints. <br/>
+With Cobre's Reports API, you have full control over your reporting criteria, enabling you to make data-driven decisions with precision and confidence. Whether you need the previous day report or comprehensive historical reports, Cobre's Reports API provides a powerful and flexible solution to meet your business requirements.
+
+<Steps>
+<Step title="Generate Reports on Demand">
+Easily create custom reports tailored to your specific needs, selecting the resources and date ranges that matter most to you.
+</Step>
+<Step title="Obtain Created Reports">
+Access and manage the reports you've generated, ensuring you always have the insights you need at your fingertips.
+</Step>
+<Step title="Download Desired Reports">
+Conveniently download the reports in your preferred format for offline analysis and archiving.
+</Step>
+</Steps>
+<Accordion title="Types" defaultOpen>
+- **Money Movement**: Format JSON/CSV - Money Movement and SPEI (MX)
+- **Actas:** Format CSV - Account Transactions and Transactions
+- **Counterparties:** Format CSV
+</Accordion>

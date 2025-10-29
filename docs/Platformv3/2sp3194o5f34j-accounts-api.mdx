@@ -1,0 +1,29 @@
+---
+title: "Accounts API"
+sidebarTitle: "Overview"
+---
+
+`v1.0`
+
+```bash API Base URL
+
+Production:https://api.cobre.co/v1/
+```
+
+<Tabs>
+  <Tab title="Security">
+    <CodeGroup>
+    ```bash Bearer Auth
+    Provide your bearer token in the Authorization header when making requests to protected resources.
+
+    Example: Authorization: Bearer 123
+    ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+This API provides services to set up, maintain, and manage connected accounts. For this purpose a set of different APIs and endpoints will be exposed so that by using the provided services clients can register accounts and obtain all the previously registered accounts and their corresponding information.
+
+Please note the list of banks available for this solution in the [Providers](https://developers.cobre.co/docs/Platformv3/kuj32mc6lghfi-providers-catalog) documentation.
+
+A `delete` endpoint will be facilitated so that accounts can be unlinked from Cobre’s platform. ( 🚧 Coming soon)
